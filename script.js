@@ -83,6 +83,5 @@ fetch('https://jsonplaceholder.typicode.com/posts?_limit=11&_start=5')
         albumsWrapperElement.append(albumsListTitle, albumsListElement);
       })
 
-
-    document.body.prepend(albumsWrapperElement, postsWrapper);
+    document.querySelector('#main-content').prepend(albumsWrapperElement, postsWrapper);
   })

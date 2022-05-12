@@ -56,7 +56,8 @@
 10. Sukurti navigacijos elementą, kuris nukreips į puslapius:
   10.1. Home / pagrindinis puslapis.
   10.2. Users / vartotojų puslapis.
-  10.3. Albums / albumų puslapis
+  10.3. Albums / albumų puslapis.
+  10.4. Posts / pranešimų puslapis.
 
 11. Navigacijos elemente sukurti paieškos laukelį (formą ir text input).
 12. Formos submit metu, nukreipti į naują puslapį (search.html).
