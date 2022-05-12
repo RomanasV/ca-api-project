@@ -105,3 +105,28 @@ fetch('https://jsonplaceholder.typicode.com/albums?title=' + searchPhrase)
       albumsWrapper.innerHTML = `<h2>No albums :(</h2>`
     }
   })
+
+
+let searchPageForm = document.querySelector('#search-page-form');
+
+// Papildoma: 
+// 15. Search puslapyje turi būti paieškos forma, kuri veikia neperkraunant puslapio.
+// 16. Sukurti filtravimo galimybę iš dalies frazės, o nebūtinai pagal tikslią frazę.
+
+searchPageForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  let searchInput = event.target.elements.search.value;
+
+  console.log(searchInput);
+
+  fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(users => {
+      users.map(user => {
+        if (user.name.includes(searchInput)) {
+          console.log(user.name);
+        }
+      })
+    })
+})
