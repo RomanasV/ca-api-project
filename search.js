@@ -4,12 +4,15 @@ let searchPhrase = urlParams.get('search');
 let mainContent = document.querySelector('#main-content');
 let usersWrapper = document.createElement('div');
 usersWrapper.classList.add('users-wrapper');
+let postsWrapper = document.createElement('div');
+postsWrapper.classList.add('posts-wrapper');
+let albumsWrapper = document.createElement('div');
+albumsWrapper.classList.add('albums-wrapper');
+mainContent.append(usersWrapper, postsWrapper, albumsWrapper);
 
 fetch('https://jsonplaceholder.typicode.com/users?username=' + searchPhrase)
   .then(res => res.json())
   .then(users => {
-    mainContent.append(usersWrapper);
-
     if (users.length > 0) {
       usersWrapper.innerHTML = `<h2>Found users:</h2>`;
       let usersList = document.createElement('ul');
@@ -61,11 +64,6 @@ fetch('https://jsonplaceholder.typicode.com/users?username=' + searchPhrase)
 fetch('https://jsonplaceholder.typicode.com/posts?title=' + searchPhrase)
   .then(res => res.json())
   .then(posts => {
-    let postsWrapper = document.createElement('div');
-    postsWrapper.classList.add('posts-wrapper');
-
-    mainContent.append(postsWrapper);
-
     if (posts.length > 0) {
       postsWrapper.innerHTML = `<h2>Posts:</h2>`;
       let postsList = document.createElement('ul');
@@ -85,11 +83,6 @@ fetch('https://jsonplaceholder.typicode.com/posts?title=' + searchPhrase)
 fetch('https://jsonplaceholder.typicode.com/albums?title=' + searchPhrase)
   .then(res => res.json())
   .then(albums => {
-    let albumsWrapper = document.createElement('div');
-    albumsWrapper.classList.add('albums-wrapper');
-
-    mainContent.append(albumsWrapper);
-
     if (albums.length > 0) {
       albumsWrapper.innerHTML = `<h2>Albums:</h2>`;
       let albumsList = document.createElement('ul');
@@ -119,8 +112,6 @@ searchPageForm.addEventListener('submit', (event) => {
   fetch('https://jsonplaceholder.typicode.com/users')
     .then(res => res.json())
     .then(users => {
-      mainContent.append(usersWrapper);
-      
       let usersFound = false;
       usersWrapper.innerHTML = `<h2>Found users:</h2>`;
       let usersList = document.createElement('ul');
@@ -149,8 +140,49 @@ searchPageForm.addEventListener('submit', (event) => {
   fetch('https://jsonplaceholder.typicode.com/posts')
     .then(res => res.json())
     .then(posts => {
+      let postsFound = false;
+      postsWrapper.innerHTML = `<h2>Posts:</h2>`;
+      let postsList = document.createElement('ul');
+      postsWrapper.append(postsList);
+
       posts.map(post => {
-        console.log(post);
+        let title = post.title.toLowerCase();
+
+        if (title.includes(searchInput)) {
+          let postItem = document.createElement('li');
+          postItem.innerHTML = `<a href="./post.html?post_id=${post.id}">${post.title}</a>`
+          postsList.append(postItem);
+          postsFound = true;
+        }
       })
+
+      if (!postsFound) {
+        postsWrapper.innerHTML = `<h2>No posts :(</h2>`
+      }
+    })
+
+  fetch('https://jsonplaceholder.typicode.com/albums')
+    .then(res => res.json())
+    .then(albums => {
+      let albumsFound = false;
+      albumsWrapper.innerHTML = `<h2>Albums:</h2>`;
+      let albumsList = document.createElement('ul');
+      albumsWrapper.append(albumsList);
+
+      albums.map(album => {
+        console.log(album);
+        let title = album.title.toLowerCase();
+
+        if (title.includes(searchInput)) {
+          let albumItem = document.createElement('li');
+          albumItem.innerHTML = `<a href="./album.html?album_id=${album.id}">${album.title}</a>`
+          albumsList.append(albumItem);
+          albumsFound = true;
+        }
+      })
+
+      if (!albumsFound) {
+        albumsWrapper.innerHTML = `<h2>No albums :(</h2>`
+      }
     })
 })
