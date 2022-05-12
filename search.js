@@ -2,13 +2,12 @@ let queryParams = document.location.search;
 let urlParams = new URLSearchParams(queryParams);
 let searchPhrase = urlParams.get('search');
 let mainContent = document.querySelector('#main-content');
+let usersWrapper = document.createElement('div');
+usersWrapper.classList.add('users-wrapper');
 
 fetch('https://jsonplaceholder.typicode.com/users?username=' + searchPhrase)
   .then(res => res.json())
   .then(users => {
-    let usersWrapper = document.createElement('div');
-    usersWrapper.classList.add('users-wrapper');
-
     mainContent.append(usersWrapper);
 
     if (users.length > 0) {
@@ -106,7 +105,6 @@ fetch('https://jsonplaceholder.typicode.com/albums?title=' + searchPhrase)
     }
   })
 
-
 let searchPageForm = document.querySelector('#search-page-form');
 
 // Papildoma: 
@@ -116,17 +114,43 @@ let searchPageForm = document.querySelector('#search-page-form');
 searchPageForm.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  let searchInput = event.target.elements.search.value;
-
-  console.log(searchInput);
+  let searchInput = event.target.elements.search.value.trim().toLowerCase();
 
   fetch('https://jsonplaceholder.typicode.com/users')
     .then(res => res.json())
     .then(users => {
+      mainContent.append(usersWrapper);
+      
+      let usersFound = false;
+      usersWrapper.innerHTML = `<h2>Found users:</h2>`;
+      let usersList = document.createElement('ul');
+      usersWrapper.append(usersList);
+
       users.map(user => {
-        if (user.name.includes(searchInput)) {
-          console.log(user.name);
+        let name = user.name.toLowerCase();
+        let userName = user.username.toLowerCase();
+        let email = user.email.toLowerCase();
+
+        if (name.includes(searchInput) || userName.includes(searchInput) || email.includes(searchInput)) {
+          let userItem = document.createElement('li');
+          userItem.innerHTML = `<a href="./user.html?user_id=${user.id}">${user.name}</a>`;
+          usersList.append(userItem);
+
+          usersFound = true;
         }
+      })
+
+      if (!usersFound) {
+        usersWrapper.innerHTML = `<h2>No users:</h2>`;
+      }
+
+    })
+
+  fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(res => res.json())
+    .then(posts => {
+      posts.map(post => {
+        console.log(post);
       })
     })
 })
