@@ -1,3 +1,45 @@
+async function getUsers() {
+  // fetch('https://jsonplaceholder.typicode.com/users')
+  //   .then(res => res.json())
+  //   .then(userData => console.log(userData))
+
+  let usersResponse = await fetch('https://jsonplaceholder.typicode.com/users');
+  let usersData = await usersResponse.json();
+  return usersData;
+}
+
+async function getUser(userId) {
+  let userResponse = await fetch('https://jsonplaceholder.typicode.com/users/' + userId);
+  // return await userResponse.json();
+  let userData = await userResponse.json();
+  return userData
+}
+
+async function getPosts() {
+  let postsResponse = await fetch('https://jsonplaceholder.typicode.com/posts');
+  let postsData = await postsResponse.json();
+  return postsData;
+}
+
+let getAlbums = async () => {
+  let albumsResponse = await fetch('https://jsonplaceholder.typicode.com/albums');
+  let albumsData = await albumsResponse.json();
+  return albumsData;
+}
+
+async function renderPosts() {
+  let users = await getUsers();
+  let posts = await getPosts();
+  let albums = await getAlbums();
+
+  posts.map(async (post) => {
+    let postAuthor = await getUser(post.userId);
+    let result = postAuthor;
+  })
+}
+
+renderPosts();
+
 // fetch('https://jsonplaceholder.typicode.com/posts?_limit=11&_start=5')
 //   .then(res => res.json())
 //   .then(posts => {
